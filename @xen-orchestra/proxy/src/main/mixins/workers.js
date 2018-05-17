@@ -5,6 +5,10 @@ export default class Workers {
     return this._worker
   }
 
+  getNumberOfWorkers () {
+    return 42
+  }
+
   constructor (app) {
     app.on('start', () => {
       this._worker = new Worker(require.resolve('../../worker'))

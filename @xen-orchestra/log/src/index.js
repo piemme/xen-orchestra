@@ -62,4 +62,4 @@ prototype.wrap = function (message, fn) {
 }
 
 const createLogger = namespace => new Logger(namespace)
-export { createLogger }
+export { createLogger as default }

@@ -29,15 +29,19 @@
     "@xen-orchestra/fs": "^0.0.1",
     "@xen-orchestra/log": "^0.0.0",
     "app-conf": "^0.5.0",
+    "better-sqlite3": "^4.1.1",
     "http-server-plus": "^0.10.0",
     "jest-worker": "^23.0.1",
     "json-rpc-protocol": "^0.11.4",
     "jsonwebtoken": "^8.2.1",
     "julien-f-source-map-support": "^0.1.0",
     "koa": "^2.5.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
     "lodash": "^4.17.10",
     "promise-toolbox": "^0.9.5",
-    "stoppable": "^1.0.6"
+    "stoppable": "^1.0.6",
+    "xen-api": "^0.16.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.47",
@@ -61,7 +65,8 @@
     "predev": "npm run prebuild",
     "prepublishOnly": "npm run build",
     "pretest": "eslint --ignore-path .gitignore --fix .",
-    "test": "flow status"
+    "test": "flow status",
+    "start": "node dist/cli.js"
   },
   "jest": {
     "collectCoverage": true,

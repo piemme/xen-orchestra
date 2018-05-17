@@ -1,7 +1,7 @@
 // @flow
 
 import emitAsync from '@xen-orchestra/emit-async'
-import { createLogger } from '@xen-orchestra/log'
+import createLogger from '@xen-orchestra/log'
 
 const { debug, warn } = createLogger('hooks')
 
