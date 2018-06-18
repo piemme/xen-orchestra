@@ -1,121 +1,45 @@
 #!/usr/bin/env node
 
-const APP_NAME = 'xo-proxy'
+import hrp from 'http-request-plus'
+import { format } from 'json-rpc-protocol'
 
-// -------------------------------------------------------------------
-
-{
-  const {
-    catchGlobalErrors,
-    configure,
-  } = require('@xen-orchestra/log/configure')
-
-  configure(require('@xen-orchestra/log/transports/console').default())
-
-  catchGlobalErrors(require('@xen-orchestra/log').default('main'))
+const required = param => {
+  throw new Error(`missing ${param} parameter`)
 }
 
-const { fatal, info, warn } = require('@xen-orchestra/log').default(
-  'main:bootstrap'
-)
-
-// -------------------------------------------------------------------
-
 const main = async args => {
-  info('starting')
-
-  const config = await require('app-conf').load(APP_NAME, {
-    appDir: `${__dirname}/..`,
-    ignoreUnknownFormats: true,
-  })
-
-  let httpServer = new (require('http-server-plus'))()
-
-  const readFile = require('promise-toolbox').promisify(require('fs').readFile)
-  await require('@xen-orchestra/async-map').default(
-    config.http.listen,
-    async ({ cert, key, ...opts }) => {
-      if (cert !== undefined && key !== undefined) {
-        ;[opts.cert, opts.key] = await Promise.all([
-          readFile(cert),
-          readFile(key),
-        ])
-      }
-
-      try {
-        const niceAddress = await httpServer.listen(opts)
-        info(`Web server listening on ${niceAddress}`)
-      } catch (error) {
-        if (error.niceAddress !== undefined) {
-          warn(`Web server could not listen on ${error.niceAddress}`)
-
-          const { code } = error
-          if (code === 'EACCES') {
-            warn('  Access denied.')
-            warn('  Ports < 1024 are often reserved to privileges users.')
-          } else if (code === 'EADDRINUSE') {
-            warn('  Address already in use.')
-          }
-        } else {
-          warn('Web server could not listen', error)
-        }
-      }
-    }
-  )
-
-  try {
-    const { group, user } = config
-    group != null && process.setgid(group)
-    user != null && process.setuid(user)
-  } catch (error) {
-    warn('failed to change group/user', error)
+  if (args.length === 0 || args.includes('-h')) {
+    return console.log(
+      '%s',
+      `
+Usage: xo-proxy-cli <XO proxy URL> <method> [<param>=<value>]...
+`
+    )
   }
 
-  require('julien-f-source-map-support/register')
+  const [url = required('url'), method = required('method')] = args
 
-  httpServer = require('stoppable')(httpServer)
+  const params = {}
+  for (let i = 2, n = args.length; i < n; ++i) {
+    const param = args[i]
+    const j = param.indexOf('=')
+    params[param.slice(0, j)] = param.slice(j + 1)
+  }
 
-  const App = require('./main').default
-  const app = new App({
-    appName: APP_NAME,
-    config,
-    httpServer,
-    safeMode: require('lodash/includes')(args, '--safe-mode'),
+  return hrp.post(url, {
+    body: format.request(0, method, params),
+    headers: {
+      'content-type': 'application/json',
+    },
+    pathname: '/api',
   })
-  app.on('stop', () =>
-    require('promise-toolbox').fromCallback(cb => httpServer.stop(cb))
-  )
-  await app.start()
-
-  // Gracefully shutdown on signals.
-  //
-  // TODO: implements a timeout? (or maybe it is the services launcher
-  // responsibility?)
-  require('lodash/forEach')(['SIGINT', 'SIGTERM'], signal => {
-    let alreadyCalled = false
-
-    process.on(signal, () => {
-      if (alreadyCalled) {
-        warn('forced exit')
-        process.exit(1)
-      }
-      alreadyCalled = true
-
-      info(`${signal} caught, closing…`)
-      app.stop()
-    })
-  })
-
-  return require('promise-toolbox').fromEvent(app, 'stopped')
 }
 main(process.argv.slice(2)).then(
   () => {
-    info('bye :-)')
-
     process.exit(0)
   },
   error => {
-    fatal('exception in main', error)
+    console.error('exception in main', error)
 
     process.exit(1)
   }
