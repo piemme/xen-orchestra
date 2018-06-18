@@ -22,4 +22,14 @@ export default class Xapi {
     }
     return id
   }
+
+  getObjects ({ xapiId }) {
+    console.log('xapiId', xapiId)
+    try {
+      console.log('XAPIS[xapiId].objects.all', XAPIS[xapiId].objects.all)
+    } catch (e) {
+      console.log('ERROR', e)
+    }
+    return XAPIS[xapiId].objects.all
+  }
 }

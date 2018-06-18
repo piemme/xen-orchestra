@@ -3,7 +3,7 @@ import SqliteDatabase from 'better-sqlite3'
 export default class Database {
   constructor (app) {
     this.db = new SqliteDatabase('proxy.db')
-    app.on('stop', this.db.close)
+    app.on('stop', this.db.close.bind(this.db))
 
     try {
       this.db.prepare(

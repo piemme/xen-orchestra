@@ -28,7 +28,7 @@ export default class Api {
   }
 
   _call (method, params) {
-    console.log(`[CALL] ${method}`)
+    console.log(`[CALL] ${method}(${JSON.stringify(params)})`)
     if (this.app[method] === undefined) {
       const error = new MethodNotFound(method)
       throw error
