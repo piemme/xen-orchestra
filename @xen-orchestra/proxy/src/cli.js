@@ -109,6 +109,14 @@ const main = async args => {
   return require('promise-toolbox').fromEvent(app, 'stopped')
 }
 main(process.argv.slice(2)).then(
-  () => info('bye :-)'),
-  error => fatal('exception in main', error)
+  () => {
+    info('bye :-)')
+
+    process.exit(0)
+  },
+  error => {
+    fatal('exception in main', error)
+
+    process.exit(1)
+  }
 )
