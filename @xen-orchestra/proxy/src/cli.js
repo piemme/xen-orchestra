@@ -23,7 +23,14 @@ Usage: xo-proxy-cli <XO proxy URL> <method> [<param>=<value>]...
   for (let i = 2, n = args.length; i < n; ++i) {
     const param = args[i]
     const j = param.indexOf('=')
-    params[param.slice(0, j)] = param.slice(j + 1)
+    if (j === -1) {
+      throw new Error(`invalid param format: ${param}`)
+    }
+    let value = param.slice(j + 1)
+    if (value.startsWith('json:')) {
+      value = JSON.parse(value.slice(5))
+    }
+    params[param.slice(0, j)] = value
   }
 
   return hrp.post(url, {
