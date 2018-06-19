@@ -17,12 +17,21 @@ export default class Api {
     })
     koa.use(router.routes()).use(router.allowedMethods())
     router.post('/', koaBody(), async ctx => {
-      const body = parse(ctx.request.body)
+      let body
       try {
-        const result = await this._call(body.method, body.params)
-        ctx.body = format.response(0, result)
+        body = parse(ctx.request.body)
       } catch (error) {
-        ctx.body = format.error(0, error)
+        ctx.body = format.error(null, error)
+        return
+      }
+
+      try {
+        ctx.body = format.response(
+          body.id,
+          await this._call(body.method, body.params)
+        )
+      } catch (error) {
+        ctx.body = format.error(body.id, error)
       }
     })
   }
