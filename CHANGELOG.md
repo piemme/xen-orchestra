@@ -6,6 +6,7 @@
 
 - [Backup (file) restore] Order backups by date in selector [#3294](https://github.com/vatesfr/xen-orchestra/issues/3294) (PR [#3374](https://github.com/vatesfr/xen-orchestra/pull/3374))
 - [Self] Hide Tasks entry in menu for self users [#3311](https://github.com/vatesfr/xen-orchestra/issues/3311) (PR [#3373](https://github.com/vatesfr/xen-orchestra/pull/3373))
+- Web hooks plugin [#1946](https://github.com/vatesfr/xen-orchestra/issues/1946)
 
 ### Bug fixes
 
@@ -16,6 +17,7 @@
 
 ### Released packages
 
+- xo-server-hooks: 0.1.0
 - xo-server v5.26.0
 - xo-web v5.26.0
 
