@@ -58,7 +58,9 @@ export default ({
             key =>
               key === 'level'
                 ? NAMES[log.level]
-                : key === 'time' ? log.time.toISOString() : log[key]
+                : key === 'time'
+                  ? log.time.toISOString()
+                  : log[key]
           ),
           text: prettyFormat(log.data),
         },

@@ -41,7 +41,9 @@ const getConfig = (key, ...args) => {
   const config = configs[key]
   return config === undefined
     ? {}
-    : typeof config === 'function' ? config(...args) : config
+    : typeof config === 'function'
+      ? config(...args)
+      : config
 }
 
 module.exports = function (pkg, plugins, presets) {

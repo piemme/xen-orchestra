@@ -6,9 +6,11 @@ export default class Database {
     app.on('stop', this.db.close.bind(this.db))
 
     try {
-      this.db.prepare(
-        'CREATE TABLE Objects (key varchar(255), value varchar(255), PRIMARY KEY(key))'
-      ).run()
+      this.db
+        .prepare(
+          'CREATE TABLE Objects (key varchar(255), value varchar(255), PRIMARY KEY(key))'
+        )
+        .run()
     } catch (e) {
       console.log('Table already exists')
     }

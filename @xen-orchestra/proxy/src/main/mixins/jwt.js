@@ -10,7 +10,9 @@ export default class JsonWebToken {
   constructor (
     _: any,
     {
-      config: { jwt: { expiresIn, secret } },
+      config: {
+        jwt: { expiresIn, secret },
+      },
     }: {
       config: { jwt: { expiresIn?: string, secret: string } },
     }
