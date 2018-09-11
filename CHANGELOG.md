@@ -6,6 +6,7 @@
 
 - [Remotes] Test the remote automatically on changes [#3323](https://github.com/vatesfr/xen-orchestra/issues/3323) (PR [#3397](https://github.com/vatesfr/xen-orchestra/pull/3397))
 - [Remotes] Use *WORKGROUP* as default domain for new SMB remote (PR [#3398](https://github.com/vatesfr/xen-orchestra/pull/3398))
+- [Remotes] Display the remote status [#3323](https://github.com/vatesfr/xen-orchestra/issues/3323) (PR [#3400](https://github.com/vatesfr/xen-orchestra/pull/3400))
 
 ### Bug fixes
 
